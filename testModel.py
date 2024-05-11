@@ -17,10 +17,10 @@ class_labels = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
 
 # Function to preprocess the uploaded image
 def preprocess_image(image_data):
-    img = image.load_img(image_data, target_size=(150, 150))
-    img_array = image.img_to_array(img)
+    img = Image.open(image_data)
+    img = img.resize((150, 150))  # Resize the image
+    img_array = np.array(img) / 255.0  # Normalize pixel values
     img_array = np.expand_dims(img_array, axis=0)
-    img_array /= 255.
     return img_array
 
 # Function to make predictions
