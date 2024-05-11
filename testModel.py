@@ -6,7 +6,7 @@ import numpy as np
 # Load the trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('flower_classification_model.h5')
+    model = tf.keras.models.load_model('xx.h5')
     return model
 
 model = load_model()
