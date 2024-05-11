@@ -16,7 +16,7 @@ file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 def import_and_predict(image_data, model):
     size = (150, 150)
-    image = cv2.imdecode(np.frombuffer(image_data.read(), np.uint8), cv2.IMREAD_COLOR)  # Changed fromstring to frombuffer
+    image = np.array(Image.open(image_data))
     resized_image = cv2.resize(image, size, interpolation=cv2.INTER_AREA)
     img_array = np.expand_dims(resized_image, axis=0) / 255.0
     prediction = model.predict(img_array)
