@@ -11,10 +11,10 @@ def load_model():
 
 # Function to preprocess the image
 def preprocess_image(image):
-    img = image.resize((150, 150))  # Resize the image to match model's expected sizing
+    img = image.resize((150, 150))  
     img_array = np.array(img)
-    img_array = img_array / 255.0  # Normalize the image
-    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    img_array = img_array / 255.0  
+    img_array = np.expand_dims(img_array, axis=0)  
     return img_array
 
 # Function to make predictions
