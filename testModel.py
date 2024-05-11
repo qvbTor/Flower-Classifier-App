@@ -21,7 +21,7 @@ st.write("""
 def import_and_predict(image_data, model):
     try:
         size = (150, 150)
-        image = ImageOps.fit(image_data, size, Image.ANTIALIAS)
+        image = image_data.resize(size)  # Resize without ANTIALIAS
         img = np.asarray(image)
         img = img / 255.0  # Normalize pixel values
         img = np.expand_dims(img, axis=0)  # Add batch dimension
