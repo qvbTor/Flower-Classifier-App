@@ -1,27 +1,38 @@
+import streamlit as st
 import tensorflow as tf
-from tensorflow.keras.preprocessing import image
+from PIL import Image, ImageOps
 import numpy as np
 
-# Load the saved model
-model = tf.keras.models.load_model("xx.h5")
+# Load the trained model
+@st.cache(allow_output_mutation=True)
+def load_model():
+    model = tf.keras.models.load_model('flower_classification_model.h5')
+    return model
 
-# Load and preprocess the test image
-img_path = "random test/6.jpg"  # Replace "path_to_test_image.jpg" with the path to your test image
-img = image.load_img(img_path, target_size=(150, 150))
-img_array = image.img_to_array(img)
-img_array = np.expand_dims(img_array, axis=0)
-img_array /= 255.
+model = load_model()
 
-# Make predictions
-predictions = model.predict(img_array)
+# Title
+st.title('Flower Type Prediction')
 
-# Get the predicted class label
-predicted_class_index = np.argmax(predictions[0])
-class_labels = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']  # Assuming these are your class labels
-predicted_class = class_labels[predicted_class_index]
+# File uploader
+file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-# Evaluate the model on the test image
-accuracy = model.evaluate(img_array, np.array([[1 if i == predicted_class_index else 0 for i in range(len(class_labels))]]))[1]
+# Function to preprocess and make predictions
+def import_and_predict(image_data, model):
+    size = (150, 150)  # Adjust this size according to your model's input size
+    image = ImageOps.fit(image_data, size)
+    img = np.asarray(image)
+    img_reshape = img[np.newaxis, ...]
+    prediction = model.predict(img_reshape)
+    return prediction
 
-print("Predicted class:", predicted_class)
-print("Model Accuracy:", accuracy)
+# Display predictions
+if file is None:
+    st.text("Please upload an image file")
+else:
+    image = Image.open(file)
+    st.image(image, use_column_width=True)
+    prediction = import_and_predict(image, model)
+    class_names = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']  # List of class names
+    predicted_class = class_names[np.argmax(prediction)]
+    st.success(f'The predicted flower type is: {predicted_class}')
