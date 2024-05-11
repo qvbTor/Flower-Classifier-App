@@ -2,10 +2,11 @@ import streamlit as st
 import tensorflow as tf
 import cv2
 import numpy as np
+from PIL import Image
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('xx.h5')
+    model = tf.keras.models.load_model('final_model.h5')
     return model
 
 model = load_model()
