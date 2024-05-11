@@ -19,15 +19,10 @@ def preprocess_image(image):
 
 # Function to make predictions
 def make_prediction(model, img_array):
+    print("Input image array shape:", img_array.shape)
     predictions = model.predict(img_array)
+    print("Predictions:", predictions)
     return predictions
-
-# Display the prediction result
-def display_prediction(predictions):
-    class_labels = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
-    predicted_class_index = np.argmax(predictions[0])
-    predicted_class = class_labels[predicted_class_index]
-    return predicted_class
 
 # Main function to run the Streamlit app
 def main():
