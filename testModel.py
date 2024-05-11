@@ -28,7 +28,7 @@ if file is None:
 else:
     st.image(file, use_column_width=True)
     prediction = import_and_predict(file, model)
-    class_labels = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
+    class_labels = ['Daisy', 'Dandelion', 'Rose', 'Sunflower', 'Tulip']
     predicted_class_index = np.argmax(prediction)
     predicted_class = class_labels[predicted_class_index]
     st.success(f'The predicted flower type is: {predicted_class}')
