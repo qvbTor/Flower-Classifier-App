@@ -17,9 +17,10 @@ file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 def import_and_predict(image_data, model):
     size = (150, 150)
-    image = np.array(Image.open(image_data))
-    resized_image = cv2.resize(image, size, interpolation=cv2.INTER_AREA)
-    img_array = np.expand_dims(resized_image, axis=0) / 255.0
+    image = Image.open(image_data)
+    resized_image = image.resize(size)
+    img_array = np.array(resized_image) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
     prediction = model.predict(img_array)
     return prediction
 
