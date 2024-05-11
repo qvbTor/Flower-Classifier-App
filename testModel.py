@@ -1,51 +1,51 @@
 import streamlit as st
-import tensorflow as tf
-from PIL import Image, ImageOps
+from PIL import Image
 import numpy as np
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
 
-# Function to load the trained model
+# Load the saved model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('xx.h5')
+    model = tf.keras.models.load_model("xx.h5")
     return model
 
-# Load the model
 model = load_model()
 
-# Title
-st.write("""
-# Flower Type Prediction
-""")
+# Define class labels
+class_labels = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
 
-# Function to preprocess and make predictions
-def import_and_predict(image_data, model):
-    try:
-        size = (150, 150)
-        image = image_data.resize(size)  # Resize without ANTIALIAS
-        img = np.asarray(image)
-        img = img / 255.0  # Normalize pixel values
-        img = np.expand_dims(img, axis=0)  # Add batch dimension
-        prediction = model.predict(img)
-        return prediction
-    except Exception as e:
-        st.error(f"Error during prediction: {e}")
-        return None
+# Function to preprocess the uploaded image
+def preprocess_image(image_data):
+    img = image.load_img(image_data, target_size=(150, 150))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.
+    return img_array
+
+# Function to make predictions
+def predict(image_data, model):
+    img_array = preprocess_image(image_data)
+    predictions = model.predict(img_array)
+    predicted_class_index = np.argmax(predictions[0])
+    predicted_class = class_labels[predicted_class_index]
+    accuracy = predictions[0][predicted_class_index] * 100  # Confidence score
+    return predicted_class, accuracy
+
+# Streamlit app
+st.title("Flower Classifier")
 
 # File uploader
-file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-# Display predictions
-if file is None:
-    st.text("Please upload an image file")
-else:
-    try:
-        image = Image.open(file)
-        st.image(image, use_column_width=True)
-        prediction = import_and_predict(image, model)
-        if prediction is not None:
-            class_names = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
-            predicted_class_index = np.argmax(prediction)
-            predicted_class = class_names[predicted_class_index]
-            st.success(f'Predicted flower type: {predicted_class}')
-    except Exception as e:
-        st.error(f"Error processing image: {e}")
+if uploaded_file is not None:
+    # Display the uploaded image
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Uploaded Image', use_column_width=True)
+
+    # Make predictions
+    predicted_class, confidence = predict(uploaded_file, model)
+
+    # Display predictions
+    st.write(f"Predicted Class: {predicted_class}")
+    st.write(f"Confidence: {confidence:.2f}%")
