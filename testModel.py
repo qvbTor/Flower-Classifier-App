@@ -3,7 +3,6 @@ import tensorflow as tf
 from PIL import Image, ImageOps
 import numpy as np
 
-# Load the trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
     model = tf.keras.models.load_model('xx.h5')
@@ -11,35 +10,25 @@ def load_model():
 
 model = load_model()
 
-# Title
-st.title('Flower Type Prediction')
+st.write("# Flower Type Prediction")
 
-# File uploader
-file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+file = st.file_uploader("Choose a flower photo from computer", type=["jpg", "jpeg", "png"])
 
-# Function to preprocess and make predictions
 def import_and_predict(image_data, model):
-    try:
-        size = (150, 150)
-        image = ImageOps.fit(image_data, size)
-        img_array = np.asarray(image)
-        img_array = img_array / 255.0  # Normalize pixel values
-        img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
-        prediction = model.predict(img_array)
-        return prediction
-    except Exception as e:
-        st.error(f"Error during prediction: {e}")
-        return None
+    size = (150, 150)
+    image = ImageOps.fit(image_data, size)
+    img = np.asarray(image)
+    img = img / 255.0  # Normalize pixel values
+    img = np.expand_dims(img, axis=0)  # Add batch dimension
+    prediction = model.predict(img)
+    return prediction
 
-# Display predictions
-if file is not None:
-    try:
-        image = Image.open(file)
-        st.image(image, use_column_width=True)
-        prediction = import_and_predict(image, model)
-        if prediction is not None:
-            st.success(f'The predicted flower type is: {prediction}')
-    except Exception as e:
-        st.error(f"Error processing image: {e}")
-else:
+if file is None:
     st.text("Please upload an image file")
+else:
+    image = Image.open(file)
+    st.image(image, use_column_width=True)
+    prediction = import_and_predict(image, model)
+    flower_types = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
+    predicted_flower = flower_types[np.argmax(prediction)]
+    st.success(f"Predicted Flower Type: {predicted_flower}")
