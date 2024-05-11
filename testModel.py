@@ -5,7 +5,7 @@ import numpy as np
 
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model('xx.h5')
+    model = tf.keras.models.load_model('final_model.h5')
     return model
 
 model = load_model()
@@ -16,7 +16,7 @@ file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 def import_and_predict(image_data, model):
     size = (150, 150)
-    image = cv2.imdecode(np.fromstring(image_data.read(), np.uint8), cv2.IMREAD_COLOR)
+    image = cv2.imdecode(np.frombuffer(image_data.read(), np.uint8), cv2.IMREAD_COLOR)  # Changed fromstring to frombuffer
     resized_image = cv2.resize(image, size, interpolation=cv2.INTER_AREA)
     img_array = np.expand_dims(resized_image, axis=0) / 255.0
     prediction = model.predict(img_array)
