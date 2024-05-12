@@ -27,7 +27,8 @@ def display_prediction(predictions):
     class_labels = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
     predicted_class_index = np.argmax(predictions[0])
     predicted_class = class_labels[predicted_class_index]
-    return predicted_class, predictions[0][predicted_class_index]
+    probability = predictions[0][predicted_class_index]
+    return predicted_class, probability
 
 # Flower descriptions
 flower_descriptions = {
@@ -76,9 +77,10 @@ def main():
 
         # Display the prediction result
         predicted_class, probability = display_prediction(predictions)
-        if predicted_class in flower_descriptions:
-            st.success(f"The predicted flower species is: {predicted_class} ({probability * 100:.2f}%)")
-            st.write(f"Description: {flower_descriptions[predicted_class]}")
+        if probability >= 0.5:
+            if predicted_class in flower_descriptions:
+                st.success(f"The predicted flower species is: {predicted_class} ({probability * 100:.2f}%)")
+                st.write(f"Description: {flower_descriptions[predicted_class]}")
         else:
             st.error("Unrecognized flower or object.")
 
