@@ -29,6 +29,15 @@ def display_prediction(predictions):
     predicted_class = class_labels[predicted_class_index]
     return predicted_class
 
+# Flower descriptions
+flower_descriptions = {
+    'Lilly': "Lilies are known for their large, prominent flowers and their pleasant fragrance. They are commonly used in floral arrangements and symbolize purity and renewal.",
+    'Lotus': "The lotus flower holds great significance in many cultures and religions, often representing purity, enlightenment, and rebirth. It is also known for its beauty and resilience.",
+    'Orchid': "Orchids are prized for their exquisite beauty and diversity. They come in various colors, shapes, and sizes, and are often associated with love, luxury, and refinement.",
+    'Sunflower': "Sunflowers are known for their bright yellow petals and large, round flower heads. They symbolize adoration, loyalty, and longevity, and are often associated with warmth and happiness.",
+    'Tulip': "Tulips are popular spring flowers known for their vibrant colors and elegant appearance. They symbolize perfect love, beauty, and prosperity."
+}
+
 # Main function to run the Streamlit app
 def main():
     # Load the model
@@ -68,6 +77,10 @@ def main():
         # Display the prediction result
         predicted_class = display_prediction(predictions)
         st.success(f"The predicted flower species is: {predicted_class}")
+        
+        # Display the flower description
+        if predicted_class in flower_descriptions:
+            st.write(f"Description: {flower_descriptions[predicted_class]}")
 
 # Run the Streamlit app
 if __name__ == "__main__":
