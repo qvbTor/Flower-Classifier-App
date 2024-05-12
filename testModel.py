@@ -34,9 +34,22 @@ def main():
     # Load the model
     model = load_model()
 
+    # Set the theme to dark
+    st.markdown("""
+        <style>
+            .reportview-container {
+                background: #1E1E1E;
+                color: white;
+            }
+            .sidebar .sidebar-content {
+                background: #1E1E1E;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
     # Set up the Streamlit app layout
     st.title("Flower Classifier")
-    st.write("Upload an image of a flower to classify its species.")
+    st.markdown("This app uses a pre-trained model to classify images of flowers into one of the following categories: Lilly, Lotus, Orchid, Sunflower, or Tulip.")
 
     # File uploader for image input
     uploaded_file = st.file_uploader("Choose a flower image...", type=["jpg", "jpeg", "png"])
