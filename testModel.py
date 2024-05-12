@@ -76,11 +76,11 @@ def main():
 
         # Display the prediction result
         predicted_class = display_prediction(predictions)
-        st.success(f"The predicted flower species is: {predicted_class}")
-        
-        # Display the flower description
         if predicted_class in flower_descriptions:
+            st.success(f"The predicted flower species is: {predicted_class}")
             st.write(f"Description: {flower_descriptions[predicted_class]}")
+        else:
+            st.error("Unrecognized flower or object.")
 
 # Run the Streamlit app
 if __name__ == "__main__":
